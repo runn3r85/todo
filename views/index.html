@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1>Todo Lists</h1>
+  <ul class="list-group">
+    {% for list in lists %}
+      <li class="list-group-item">
+        <h3 class="list-group-item-heading">{{list.title}}</h3>
+        <p class="list-group-item-text">{{list.description}}</p>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
