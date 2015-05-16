@@ -19,8 +19,13 @@ exports.new = function(req, res) {
 
 // Show Method
 exports.show = function(req, res) {
-  var list = todoList.findById(req.params.listId);
-  res.render('show', { title: list.title, list: list })
+  todoList.findById(req.params.listId, function(err, list){
+    if (err) {
+
+    } else {
+      res.render('show', { title: list.title, list: list })
+    }
+  });
 }
 
 // Create Method
