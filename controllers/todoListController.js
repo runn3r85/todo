@@ -7,7 +7,6 @@ exports.index = function(req, res) {
   query.sort({ createdOn: 'desc' })
        .limit(12)
        .exec(function(err, results){
-          console.log(results)
           res.render('index', { title: 'Todo List', lists: results })
        });
 }
@@ -21,9 +20,12 @@ exports.new = function(req, res) {
 exports.show = function(req, res) {
   todoList.findById(req.params.listId, function(err, list){
     if (err) {
-
-    } else {
+      res.status(500)
+      res.render('error', { error: err });
+    } else if (list) {
       res.render('show', { title: list.title, list: list })
+    } else {
+      res.status(404).send("Todo List not found.");
     }
   });
 }
