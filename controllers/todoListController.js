@@ -7,8 +7,20 @@ exports.index = function(req, res) {
   query.sort({ createdOn: 'desc' })
        .limit(12)
        .exec(function(err, results){
+          console.log(results)
           res.render('index', { title: 'Todo List', lists: results })
        });
+}
+
+// New Method
+exports.new = function(req, res) {
+  res.render('new', {title: 'New Todo List'});
+}
+
+// Show Method
+exports.show = function(req, res) {
+  var list = todoList.findById(req.params.listId);
+  res.render('show', { title: list.title, list: list })
 }
 
 // Create Method

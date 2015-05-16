@@ -7,9 +7,19 @@ router.get('/', function(req, res, next) {
   return todoListCtrl.index(req, res);
 });
 
-/* GET home page. */
+/* Post Todo list */
 router.post('/todo', function(req, res, next) {
   return todoListCtrl.create(req, res);
+});
+
+// Get New Todo list
+router.get('/todo/new', function(req, res, next) {
+  return todoListCtrl.new(req, res);
+});
+
+// Get Todo list
+router.get('/todo/:listId', function(req, res, next) {
+  return todoListCtrl.show(req, res);
 });
 
 module.exports = router;
