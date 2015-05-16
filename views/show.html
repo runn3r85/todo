@@ -3,4 +3,12 @@
 {% block content %}
   <h1>{{ list.title }}</h1>
   <p>{{ list.description }}</p>
+
+  <ul class="list-group">
+    {% for item in list.items %}
+      <li class="list-group-item">
+        {{ item.content }}
+      </li>
+    {% endfor %}
+  </ul>
 {% endblock %}
