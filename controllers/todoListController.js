@@ -18,7 +18,7 @@ exports.new = function(req, res) {
 
 // Show Method
 exports.show = function(req, res) {
-  models.TodoList.findById(req.params.listId, function(err, list){
+  models.TodoList.findById(req.params.listId).populate('items').exec(function(err, list){
     if (err) {
       res.status(500)
       res.render('error', { error: err });
