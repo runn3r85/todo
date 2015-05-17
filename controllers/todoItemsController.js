@@ -1,13 +1,14 @@
-var models = require("../models/todoListModel");
+var TodoList = require("../models/todoListModel");
+var TodoItem = require("../models/todoItemModel");
 
 // Create Method
 exports.create = function(req, res) {
-  models.TodoList.findById(req.params.listId, function(err, list){
+  TodoList.findById(req.params.listId, function(err, list){
     if (err) {
       res.status(500)
       res.render('error', { error: err });
     } else {
-      var item = new models.TodoItem({
+      var item = new TodoItem({
         content: req.body.content
       });
       item.save(function(err){

@@ -8,17 +8,4 @@ var todoListSchema = new Schema({
   createdOn: { type: Date, default: Date.now }
 });
 
-var todoItemSchema = new Schema({
-  content: { type: String, required: true },
-  completed: { type: Boolean, default: false },
-  createdOn: { type: Date, default: Date.now }
-});
-
-
-var todoList = mongoose.model('TodoList', todoListSchema);
-var todoItem = mongoose.model('TodoItem', todoItemSchema);
-
-module.exports = {
-    TodoList: todoList,
-    TodoItem: todoItem
-};
+module.exports = mongoose.model('TodoList', todoListSchema);

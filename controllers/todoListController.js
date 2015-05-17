@@ -1,8 +1,8 @@
-var models = require("../models/todoListModel");
+var TodoList = require("../models/todoListModel");
 
 // Index method
 exports.index = function(req, res) {
-  var query = models.TodoList.find();
+  var query = TodoList.find();
 
   query.sort({ createdOn: 'desc' })
        .limit(12)
@@ -18,7 +18,7 @@ exports.new = function(req, res) {
 
 // Show Method
 exports.show = function(req, res) {
-  models.TodoList.findById(req.params.listId).populate('items').exec(function(err, list){
+  TodoList.findById(req.params.listId).populate('items').exec(function(err, list){
     if (err) {
       res.status(500)
       res.render('error', { error: err });
@@ -33,7 +33,7 @@ exports.show = function(req, res) {
 
 // Create Method
 exports.create = function(req, res) {
-  var list = new models.TodoList({
+  var list = new TodoList({
     title: req.body.title,
     description: req.body.description
   });
