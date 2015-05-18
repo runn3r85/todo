@@ -17,13 +17,9 @@ mongoose.connect('mongodb://localhost/todo');
 
 var app = express();
 
-// assign the swig view engine to .html files
-var swig = require('swig');
-app.engine('html', swig.renderFile);
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'html');
+app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));

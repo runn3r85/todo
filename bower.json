@@ -1,0 +1,22 @@
+{
+  "name": "Todo",
+  "version": "0.1.0",
+  "homepage": "https://github.com/runn3r85/todo",
+  "authors": [
+    "Brandon Barrette <brandon.barrette@gmail.com>"
+  ],
+  "description": "A simple todo list application with Node.js, Express, and React.js",
+  "main": "./bin/www",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/libraries/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-sass-official": "~3.3.4"
+  }
+}

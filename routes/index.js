@@ -5,7 +5,7 @@ var todoItemsCtrl = require('../controllers/todoItemsController');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  return todoListCtrl.index(req, res);
+  res.render('index', { title: req.title });
 });
 
 /* Post Todo list */
