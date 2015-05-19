@@ -31,8 +31,9 @@ module.exports = React.createClass({
   },
   render: function() {
     return (
-      // <h1 class="text-center">Todo Lists</h1>
-        <div class="list-group">
+      <div className="all-lists">
+        <h1 className="text-center">Todo Lists</h1>
+        <div className="list-group">
           {this.state.data.map(function(list){
               return (
                 <List
@@ -43,6 +44,7 @@ module.exports = React.createClass({
               );
             })}
         </div>
+      </div>
     )
   }
 });

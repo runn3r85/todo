@@ -19868,8 +19868,9 @@ module.exports = React.createClass({displayName: "exports",
   },
   render: function() {
     return (
-      // <h1 class="text-center">Todo Lists</h1>
-        React.createElement("div", {class: "list-group"}, 
+      React.createElement("div", {className: "all-lists"}, 
+        React.createElement("h1", {className: "text-center"}, "Todo Lists"), 
+        React.createElement("div", {className: "list-group"}, 
           this.state.data.map(function(list){
               return (
                 React.createElement(List, {
@@ -19880,6 +19881,7 @@ module.exports = React.createClass({displayName: "exports",
               );
             })
         )
+      )
     )
   }
 });
