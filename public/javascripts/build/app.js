@@ -8,6 +8,7 @@ var Router = require('react-router');
 var Lists = require('./lists.jsx');
 var Header = require('./header.jsx');
 var NavBar = require('./layout.jsx');
+var NewListForm = require('./listForm.jsx');
 
 var DefaultRoute = Router.DefaultRoute;
 var Link = Router.Link;
@@ -30,21 +31,56 @@ var App = React.createClass({displayName: "App",
 });
 
 var NewListPage = React.createClass({displayName: "NewListPage",
+  handleListSubmit: function(list) {
+    $.ajax({
+      url: '/api/lists',
+      dataType: 'json',
+      type: 'POST',
+      data: list,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
   render: function(){
     return (
       React.createElement("div", null, 
-        React.createElement(Header, {text: "New Todo Lists"})
+        React.createElement(Header, {text: "New Todo Lists"}), 
+        React.createElement(NewListForm, {onListSubmit: this.handleListSubmit})
       )
     );
   }
 });
 
 var HomePage = React.createClass({displayName: "HomePage",
+  getInitialState: function() {
+    return {data: []};
+  },
+  loadListsFromServer: function() {
+    $.ajax({
+      url: '/api/lists',
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        console.log("SUCCESS");
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  componentDidMount: function() {
+    this.loadListsFromServer();
+  },
   render: function(){
     return (
       React.createElement("div", null, 
         React.createElement(Header, {text: "All Todo Lists"}), 
-        React.createElement(Lists, null)
+        React.createElement(Lists, {data: this.state.data})
       )
     );
   }
@@ -79,7 +115,7 @@ Router.run(routes, function (Handler) {
 //   document.getElementById('example')
 // );
 
-},{"../../libraries/bootstrap-sass-official/assets/javascripts/bootstrap":201,"../../libraries/jquery/dist/jquery":202,"./header.jsx":197,"./layout.jsx":198,"./lists.jsx":200,"react":196,"react-router":27}],2:[function(require,module,exports){
+},{"../../libraries/bootstrap-sass-official/assets/javascripts/bootstrap":202,"../../libraries/jquery/dist/jquery":203,"./header.jsx":197,"./layout.jsx":198,"./listForm.jsx":200,"./lists.jsx":201,"react":196,"react-router":27}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -22908,41 +22944,41 @@ module.exports = React.createClass({displayName: "exports",
 
 },{"react":196,"react-router":27}],200:[function(require,module,exports){
 var React = require('react');
+
+module.exports = React.createClass({displayName: "exports",
+  handleSubmit: function(e) {
+    e.preventDefault();
+    var title = React.findDOMNode(this.refs.title).value.trim();
+    var description = React.findDOMNode(this.refs.description).value.trim();
+    if (!title || !description) {
+      return;
+    }
+    this.props.onListSubmit({title: title, description: description});
+    React.findDOMNode(this.refs.title).value = '';
+    React.findDOMNode(this.refs.description).value = '';
+    return;
+  },
+  render: function() {
+    return (
+      React.createElement("form", {className: "listForm", onSubmit: this.handleSubmit}, 
+        React.createElement("input", {type: "text", placeholder: "Title", ref: "title"}), 
+        React.createElement("input", {type: "text", placeholder: "Description...", ref: "description"}), 
+        React.createElement("input", {type: "submit", value: "Save", className: "btn btn-success"})
+      )
+    );
+  }
+});
+
+},{"react":196}],201:[function(require,module,exports){
+var React = require('react');
 var List = require('./list.jsx');
 
 module.exports = React.createClass({displayName: "exports",
-  getInitialState: function() {
-    // This will be an API call eventually...
-    return {
-      data: [
-        {
-          title: 'Groceries',
-          description: 'My grocery list for the weekend.',
-          items: [
-            { content: "Apples" },
-            { content: "Eggs" },
-            { content: "Bread" },
-            { content: "Bananas" }
-          ]
-        },
-        {
-          title: 'Chores',
-          description: 'My weekday chores list.',
-          items: [
-            { content: "Laundry" },
-            { content: "Clean Bathroom" },
-            { content: "Dishes" },
-            { content: "Vacuum" }
-          ]
-        }
-      ]
-    };
-  },
   render: function() {
     return (
       React.createElement("div", {className: "all-lists"}, 
         React.createElement("div", {className: "list-group"}, 
-          this.state.data.map(function(list){
+          this.props.data.map(function(list){
               return (
                 React.createElement(List, {
                   title: list.title, 
@@ -22957,7 +22993,7 @@ module.exports = React.createClass({displayName: "exports",
   }
 });
 
-},{"./list.jsx":199,"react":196}],201:[function(require,module,exports){
+},{"./list.jsx":199,"react":196}],202:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.4 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
@@ -25276,7 +25312,7 @@ if (typeof jQuery === 'undefined') {
 
 }(jQuery);
 
-},{}],202:[function(require,module,exports){
+},{}],203:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/

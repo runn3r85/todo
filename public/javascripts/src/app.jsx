@@ -7,6 +7,7 @@ var Router = require('react-router');
 var Lists = require('./lists.jsx');
 var Header = require('./header.jsx');
 var NavBar = require('./layout.jsx');
+var NewListForm = require('./listForm.jsx');
 
 var DefaultRoute = Router.DefaultRoute;
 var Link = Router.Link;
@@ -29,21 +30,56 @@ var App = React.createClass({
 });
 
 var NewListPage = React.createClass({
+  handleListSubmit: function(list) {
+    $.ajax({
+      url: '/api/lists',
+      dataType: 'json',
+      type: 'POST',
+      data: list,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
   render: function(){
     return (
       <div>
         <Header text="New Todo Lists"/>
+        <NewListForm onListSubmit={this.handleListSubmit}/>
       </div>
     );
   }
 });
 
 var HomePage = React.createClass({
+  getInitialState: function() {
+    return {data: []};
+  },
+  loadListsFromServer: function() {
+    $.ajax({
+      url: '/api/lists',
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        console.log("SUCCESS");
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  componentDidMount: function() {
+    this.loadListsFromServer();
+  },
   render: function(){
     return (
       <div>
         <Header text="All Todo Lists"/>
-        <Lists />
+        <Lists data={this.state.data}/>
       </div>
     );
   }
