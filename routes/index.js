@@ -8,23 +8,23 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: req.title });
 });
 
-/* Post Todo list */
-router.post('/todo', function(req, res, next) {
-  return todoListCtrl.create(req, res);
-});
+// /* Post Todo list */
+// router.post('/todo', function(req, res, next) {
+//   return todoListCtrl.create(req, res);
+// });
 
-// Get New Todo list
-router.get('/todo/new', function(req, res, next) {
-  return todoListCtrl.new(req, res);
-});
+// // Get New Todo list
+// router.get('/todo/new', function(req, res, next) {
+//   return todoListCtrl.new(req, res);
+// });
 
-// Get Todo list
-router.get('/todo/:listId', function(req, res, next) {
-  return todoListCtrl.show(req, res);
-});
+// // Get Todo list
+// router.get('/todo/:listId', function(req, res, next) {
+//   return todoListCtrl.show(req, res);
+// });
 
-router.post('/todo/:listId/items/new', function(req, res, next) {
-  return todoItemsCtrl.create(req, res);
-});
+// router.post('/todo/:listId/items/new', function(req, res, next) {
+//   return todoItemsCtrl.create(req, res);
+// });
 
 module.exports = router;

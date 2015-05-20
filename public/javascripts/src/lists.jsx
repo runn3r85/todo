@@ -32,7 +32,6 @@ module.exports = React.createClass({
   render: function() {
     return (
       <div className="all-lists">
-        <h1 className="text-center">Todo Lists</h1>
         <div className="list-group">
           {this.state.data.map(function(list){
               return (
