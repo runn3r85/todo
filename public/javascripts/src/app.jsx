@@ -20,10 +20,19 @@ var App = React.createClass({
         <NavBar />
         <div className="container">
           <div className="col-md-8 col-md-offset-2">
-            {/* this is the important part */}
             <RouteHandler/>
           </div>
         </div>
+      </div>
+    );
+  }
+});
+
+var NewListPage = React.createClass({
+  render: function(){
+    return (
+      <div>
+        <Header text="New Todo Lists"/>
       </div>
     );
   }
@@ -45,7 +54,6 @@ var ListPage = React.createClass({
     return (
       <div>
         <Header text="List"/>
-        <List />
       </div>
     );
   }
@@ -55,8 +63,8 @@ var ListPage = React.createClass({
 var routes = (
   <Route handler={App}>
     <Route name="home" path="/" handler={HomePage}/>
+    <Route name="new" path="/lists/new" handler={NewListPage}/>
     <Route name="list" path="/lists/:listId" handler={ListPage}/>
-    <Route name="new" path="/lists/new" handler={ListPage}/>
   </Route>
 );
 

@@ -21,10 +21,19 @@ var App = React.createClass({displayName: "App",
         React.createElement(NavBar, null), 
         React.createElement("div", {className: "container"}, 
           React.createElement("div", {className: "col-md-8 col-md-offset-2"}, 
-            /* this is the important part */
             React.createElement(RouteHandler, null)
           )
         )
+      )
+    );
+  }
+});
+
+var NewListPage = React.createClass({displayName: "NewListPage",
+  render: function(){
+    return (
+      React.createElement("div", null, 
+        React.createElement(Header, {text: "New Todo Lists"})
       )
     );
   }
@@ -45,8 +54,7 @@ var ListPage = React.createClass({displayName: "ListPage",
   render: function () {
     return (
       React.createElement("div", null, 
-        React.createElement(Header, {text: "List"}), 
-        React.createElement(List, null)
+        React.createElement(Header, {text: "List"})
       )
     );
   }
@@ -56,8 +64,8 @@ var ListPage = React.createClass({displayName: "ListPage",
 var routes = (
   React.createElement(Route, {handler: App}, 
     React.createElement(Route, {name: "home", path: "/", handler: HomePage}), 
-    React.createElement(Route, {name: "list", path: "/lists/:listId", handler: ListPage}), 
-    React.createElement(Route, {name: "new", path: "/lists/new", handler: ListPage})
+    React.createElement(Route, {name: "new", path: "/lists/new", handler: NewListPage}), 
+    React.createElement(Route, {name: "list", path: "/lists/:listId", handler: ListPage})
   )
 );
 
@@ -22850,6 +22858,9 @@ module.exports = React.createClass({displayName: "exports",
 
 },{"react":196}],198:[function(require,module,exports){
 var React = require('react');
+var Router = require('react-router');
+
+var Link = Router.Link;
 
 module.exports = React.createClass({displayName: "exports",
   render: function(){
@@ -22863,11 +22874,12 @@ module.exports = React.createClass({displayName: "exports",
               React.createElement("span", {className: "icon-bar"}), 
               React.createElement("span", {className: "icon-bar"})
             ), 
-            React.createElement("a", {className: "navbar-brand", href: "#"}, "Todo")
+            React.createElement(Link, {to: "home", className: "navbar-brand"}, "Todo")
           ), 
           React.createElement("div", {id: "navbar", className: "collapse navbar-collapse"}, 
             React.createElement("ul", {className: "nav navbar-nav"}, 
-              React.createElement("li", null, React.createElement("a", {href: "#"}, "Home"))
+              React.createElement("li", null, React.createElement(Link, {to: "home"}, "Lists")), 
+              React.createElement("li", null, React.createElement(Link, {to: "new"}, "New List"))
             )
           )
         )
@@ -22876,13 +22888,17 @@ module.exports = React.createClass({displayName: "exports",
   }
 });
 
-},{"react":196}],199:[function(require,module,exports){
+},{"react":196,"react-router":27}],199:[function(require,module,exports){
 var React = require('react');
+
+var Router = require('react-router');
+
+var Link = Router.Link;
 
 module.exports = React.createClass({displayName: "exports",
   render: function() {
     return (
-      React.createElement("a", {href: "#", className: "list-group-item"}, 
+      React.createElement(Link, {to: "new", className: "list-group-item"}, 
         React.createElement("h4", {className: "list-group-item-heading listing-company"},  this.props.title), 
         React.createElement("p", {className: "list-group-item-text"},  this.props.description)
       )
@@ -22890,7 +22906,7 @@ module.exports = React.createClass({displayName: "exports",
   }
 });
 
-},{"react":196}],200:[function(require,module,exports){
+},{"react":196,"react-router":27}],200:[function(require,module,exports){
 var React = require('react');
 var List = require('./list.jsx');
 

@@ -1,4 +1,7 @@
 var React = require('react');
+var Router = require('react-router');
+
+var Link = Router.Link;
 
 module.exports = React.createClass({
   render: function(){
@@ -12,11 +15,12 @@ module.exports = React.createClass({
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <a className="navbar-brand" href='#'>Todo</a>
+            <Link to="home" className="navbar-brand">Todo</Link>
           </div>
           <div id="navbar" className="collapse navbar-collapse">
             <ul className="nav navbar-nav">
-              <li><a href='#'>Home</a></li>
+              <li><Link to="home">Lists</Link></li>
+              <li><Link to="new">New List</Link></li>
             </ul>
           </div>
         </div>
