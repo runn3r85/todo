@@ -8,6 +8,7 @@ var Lists = require('./lists.jsx');
 var Header = require('./header.jsx');
 var NavBar = require('./layout.jsx');
 var NewListForm = require('./listForm.jsx');
+var SingleList = require('./singleList.jsx');
 
 var DefaultRoute = Router.DefaultRoute;
 var Link = Router.Link;
@@ -30,6 +31,7 @@ var App = React.createClass({
 });
 
 var NewListPage = React.createClass({
+  mixins: [Router.Navigation],
   handleListSubmit: function(list) {
     $.ajax({
       url: '/api/lists',
@@ -38,9 +40,12 @@ var NewListPage = React.createClass({
       data: list,
       success: function(data) {
         this.setState({data: data});
+        //redirect
+        Router.transition.redirect('notfound')
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
+        //add error message to new page
       }.bind(this)
     });
   },
@@ -86,10 +91,29 @@ var HomePage = React.createClass({
 });
 
 var ListPage = React.createClass({
+  getInitialState: function() {
+    return {data: []};
+  },
+  loadListFromServer: function() {
+    $.ajax({
+      url: '/api/lists/' + this.props.params.listId,
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  componentDidMount: function() {
+    this.loadListFromServer();
+  },
   render: function () {
     return (
       <div>
-        <Header text="List"/>
+        <SingleList data={this.state.data}/>
       </div>
     );
   }

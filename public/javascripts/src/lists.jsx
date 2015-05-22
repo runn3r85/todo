@@ -9,6 +9,7 @@ module.exports = React.createClass({
           {this.props.data.map(function(list){
               return (
                 <List
+                  listId={list._id}
                   title={list.title}
                   description={list.description}
                   items={list.items}

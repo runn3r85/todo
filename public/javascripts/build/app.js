@@ -9,6 +9,7 @@ var Lists = require('./lists.jsx');
 var Header = require('./header.jsx');
 var NavBar = require('./layout.jsx');
 var NewListForm = require('./listForm.jsx');
+var SingleList = require('./singleList.jsx');
 
 var DefaultRoute = Router.DefaultRoute;
 var Link = Router.Link;
@@ -31,6 +32,7 @@ var App = React.createClass({displayName: "App",
 });
 
 var NewListPage = React.createClass({displayName: "NewListPage",
+  mixins: [Router.Navigation],
   handleListSubmit: function(list) {
     $.ajax({
       url: '/api/lists',
@@ -39,9 +41,12 @@ var NewListPage = React.createClass({displayName: "NewListPage",
       data: list,
       success: function(data) {
         this.setState({data: data});
+        //redirect
+        Router.transition.redirect('notfound')
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
+        //add error message to new page
       }.bind(this)
     });
   },
@@ -87,10 +92,29 @@ var HomePage = React.createClass({displayName: "HomePage",
 });
 
 var ListPage = React.createClass({displayName: "ListPage",
+  getInitialState: function() {
+    return {data: []};
+  },
+  loadListFromServer: function() {
+    $.ajax({
+      url: '/api/lists/' + this.props.params.listId,
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  componentDidMount: function() {
+    this.loadListFromServer();
+  },
   render: function () {
     return (
       React.createElement("div", null, 
-        React.createElement(Header, {text: "List"})
+        React.createElement(SingleList, {data: this.state.data})
       )
     );
   }
@@ -115,7 +139,7 @@ Router.run(routes, function (Handler) {
 //   document.getElementById('example')
 // );
 
-},{"../../libraries/bootstrap-sass-official/assets/javascripts/bootstrap":202,"../../libraries/jquery/dist/jquery":203,"./header.jsx":197,"./layout.jsx":198,"./listForm.jsx":200,"./lists.jsx":201,"react":196,"react-router":27}],2:[function(require,module,exports){
+},{"../../libraries/bootstrap-sass-official/assets/javascripts/bootstrap":203,"../../libraries/jquery/dist/jquery":204,"./header.jsx":197,"./layout.jsx":198,"./listForm.jsx":200,"./lists.jsx":201,"./singleList.jsx":202,"react":196,"react-router":27}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -22934,7 +22958,7 @@ var Link = Router.Link;
 module.exports = React.createClass({displayName: "exports",
   render: function() {
     return (
-      React.createElement(Link, {to: "new", className: "list-group-item"}, 
+      React.createElement(Link, {to: "list", params: {listId: this.props.listId}, className: "list-group-item", key: this.props.listId}, 
         React.createElement("h4", {className: "list-group-item-heading listing-company"},  this.props.title), 
         React.createElement("p", {className: "list-group-item-text"},  this.props.description)
       )
@@ -22981,6 +23005,7 @@ module.exports = React.createClass({displayName: "exports",
           this.props.data.map(function(list){
               return (
                 React.createElement(List, {
+                  listId: list._id, 
                   title: list.title, 
                   description: list.description, 
                   items: list.items}
@@ -22994,6 +23019,20 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 },{"./list.jsx":199,"react":196}],202:[function(require,module,exports){
+var React = require('react');
+
+module.exports = React.createClass({displayName: "exports",
+  render: function() {
+    return (
+      React.createElement("div", null, 
+        React.createElement("h1", {className: "text-center"}, this.props.data.title), 
+        React.createElement("p", null, this.props.data.description)
+      )
+    );
+  }
+});
+
+},{"react":196}],203:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.4 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
@@ -25312,7 +25351,7 @@ if (typeof jQuery === 'undefined') {
 
 }(jQuery);
 
-},{}],203:[function(require,module,exports){
+},{}],204:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/

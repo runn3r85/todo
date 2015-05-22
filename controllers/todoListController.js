@@ -34,7 +34,7 @@ exports.create = function(req, res) {
   list.save(function(err){
     if(err) {
       var errMsg = "Sorry, there was an error saving the todo list. " + err;
-      res.render('new', { title: 'New Todo List (error)', message: errMsg });
+      res.status(500).send({ list: list, message: errMsg });
     } else {
       //rediect to home page...
       res.status(200).send(list);
