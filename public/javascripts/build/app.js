@@ -93,7 +93,7 @@ var HomePage = React.createClass({displayName: "HomePage",
 
 var ListPage = React.createClass({displayName: "ListPage",
   getInitialState: function() {
-    return {data: []};
+    return {data: {items: []}};
   },
   loadListFromServer: function() {
     $.ajax({
@@ -139,7 +139,7 @@ Router.run(routes, function (Handler) {
 //   document.getElementById('example')
 // );
 
-},{"../../libraries/bootstrap-sass-official/assets/javascripts/bootstrap":203,"../../libraries/jquery/dist/jquery":204,"./header.jsx":197,"./layout.jsx":198,"./listForm.jsx":200,"./lists.jsx":201,"./singleList.jsx":202,"react":196,"react-router":27}],2:[function(require,module,exports){
+},{"../../libraries/bootstrap-sass-official/assets/javascripts/bootstrap":204,"../../libraries/jquery/dist/jquery":205,"./header.jsx":197,"./layout.jsx":198,"./listForm.jsx":200,"./lists.jsx":201,"./singleList.jsx":202,"react":196,"react-router":27}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -22958,7 +22958,7 @@ var Link = Router.Link;
 module.exports = React.createClass({displayName: "exports",
   render: function() {
     return (
-      React.createElement(Link, {to: "list", params: {listId: this.props.listId}, className: "list-group-item", key: this.props.listId}, 
+      React.createElement(Link, {to: "list", params: {listId: this.props.listId}, className: "list-group-item", key: this}, 
         React.createElement("h4", {className: "list-group-item-heading listing-company"},  this.props.title), 
         React.createElement("p", {className: "list-group-item-text"},  this.props.description)
       )
@@ -23020,19 +23020,42 @@ module.exports = React.createClass({displayName: "exports",
 
 },{"./list.jsx":199,"react":196}],202:[function(require,module,exports){
 var React = require('react');
+var TodoItem = require('./todoItem.jsx');
 
 module.exports = React.createClass({displayName: "exports",
   render: function() {
+    console.log(this.props.data.items);
+    var itemNodes = this.props.data.items.map(function (item) {
+      return (
+        React.createElement(TodoItem, {content: item.content})
+      );
+    });
     return (
       React.createElement("div", null, 
         React.createElement("h1", {className: "text-center"}, this.props.data.title), 
-        React.createElement("p", null, this.props.data.description)
+        React.createElement("p", null, this.props.data.description), 
+        React.createElement("ul", {className: "list-group"}, 
+          itemNodes
+        )
       )
     );
   }
 });
 
-},{"react":196}],203:[function(require,module,exports){
+},{"./todoItem.jsx":203,"react":196}],203:[function(require,module,exports){
+var React = require('react');
+
+module.exports = React.createClass({displayName: "exports",
+  render: function() {
+    return (
+      React.createElement("li", {className: "list-group-item"}, 
+         this.props.content
+      )
+    )
+  }
+});
+
+},{"react":196}],204:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.4 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
@@ -25351,7 +25374,7 @@ if (typeof jQuery === 'undefined') {
 
 }(jQuery);
 
-},{}],204:[function(require,module,exports){
+},{}],205:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/

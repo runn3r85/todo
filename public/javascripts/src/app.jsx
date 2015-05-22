@@ -92,7 +92,7 @@ var HomePage = React.createClass({
 
 var ListPage = React.createClass({
   getInitialState: function() {
-    return {data: []};
+    return {data: {items: []}};
   },
   loadListFromServer: function() {
     $.ajax({
