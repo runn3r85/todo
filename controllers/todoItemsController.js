@@ -17,7 +17,7 @@ exports.create = function(req, res) {
         } else {
           list.items.push(item)
           list.save()
-          res.render('show', { title: list.title, list: list })
+          res.status(200).send(list)
         }
       });
     }

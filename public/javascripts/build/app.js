@@ -95,6 +95,24 @@ var ListPage = React.createClass({displayName: "ListPage",
   getInitialState: function() {
     return {data: {items: []}};
   },
+  handleItemSubmit: function(item) {
+    // var items = this.state.data.items;
+    // var newItems = items.concat([item]);
+    // this.setState({data: {items: newItems}});
+    var list = this.props.params.listId;
+    $.ajax({
+      url: '/api/lists/' + list + '/items/new',
+      dataType: 'json',
+      type: 'POST',
+      data: item,
+      success: function(data) {
+        this.setState({data: {items: data.items}});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
   loadListFromServer: function() {
     $.ajax({
       url: '/api/lists/' + this.props.params.listId,
@@ -114,7 +132,7 @@ var ListPage = React.createClass({displayName: "ListPage",
   render: function () {
     return (
       React.createElement("div", null, 
-        React.createElement(SingleList, {data: this.state.data})
+        React.createElement(SingleList, {data: this.state.data, moreItemSubmit: this.handleItemSubmit})
       )
     );
   }
@@ -22934,7 +22952,10 @@ module.exports = React.createClass({displayName: "exports",
   render: function() {
     return (
       React.createElement("form", {className: "itemForm", onSubmit: this.handleSubmit}, 
-        React.createElement("input", {type: "text", ref: "content"}), 
+        React.createElement("div", {className: "form-group"}, 
+          React.createElement("label", {className: "sr-only", for: "addItem"}, "Add Item"), 
+          React.createElement("input", {type: "text", placeholder: "Add Item...", ref: "content", className: "form-control", id: "addItem"})
+        ), 
         React.createElement("input", {type: "submit", value: "Add", className: "btn btn-success"})
       )
     );
@@ -23049,26 +23070,11 @@ var TodoItem = require('./todoItem.jsx');
 var ItemForm = require('./itemForm.jsx');
 
 module.exports = React.createClass({displayName: "exports",
-  getInitialState: function() {
-    return {data: {items: []}};
-  },
-  handleItemSubmit: function(item) {
-    var list = this.props.data._id;
+  generateItem: function(item){
     // var items = this.state.data.items;
     // var newItems = items.concat([item]);
-    // this.setState({data: {items: [newItems]}});
-    $.ajax({
-      url: '/todo/' + list + '/items/new',
-      dataType: 'json',
-      type: 'POST',
-      data: item,
-      success: function(data) {
-        this.setState({data: { items: [data]}});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
+    // this.setState({data: {items: newItems}});
+    this.props.moreItemSubmit(item);
   },
   render: function() {
     var itemNodes = this.props.data.items.map(function (item) {
@@ -23080,7 +23086,7 @@ module.exports = React.createClass({displayName: "exports",
       React.createElement("div", null, 
         React.createElement("h1", {className: "text-center"}, this.props.data.title), 
         React.createElement("p", null, this.props.data.description), 
-        React.createElement(ItemForm, {onItemSubmit: this.handleItemSubmit}), 
+        React.createElement(ItemForm, {onItemSubmit: this.generateItem}), 
         React.createElement("ul", {className: "list-group"}, 
           itemNodes
         )

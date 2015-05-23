@@ -15,7 +15,10 @@ module.exports = React.createClass({
   render: function() {
     return (
       <form className="itemForm" onSubmit={this.handleSubmit}>
-        <input type="text" ref="content" />
+        <div className="form-group">
+          <label className="sr-only" for="addItem">Add Item</label>
+          <input type="text" placeholder="Add Item..." ref="content" className="form-control" id="addItem" />
+        </div>
         <input type="submit" value="Add" className="btn btn-success" />
       </form>
     );

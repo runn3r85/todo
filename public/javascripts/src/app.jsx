@@ -94,6 +94,24 @@ var ListPage = React.createClass({
   getInitialState: function() {
     return {data: {items: []}};
   },
+  handleItemSubmit: function(item) {
+    // var items = this.state.data.items;
+    // var newItems = items.concat([item]);
+    // this.setState({data: {items: newItems}});
+    var list = this.props.params.listId;
+    $.ajax({
+      url: '/api/lists/' + list + '/items/new',
+      dataType: 'json',
+      type: 'POST',
+      data: item,
+      success: function(data) {
+        this.setState({data: {items: data.items}});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
   loadListFromServer: function() {
     $.ajax({
       url: '/api/lists/' + this.props.params.listId,
@@ -113,7 +131,7 @@ var ListPage = React.createClass({
   render: function () {
     return (
       <div>
-        <SingleList data={this.state.data}/>
+        <SingleList data={this.state.data} moreItemSubmit={this.handleItemSubmit}/>
       </div>
     );
   }

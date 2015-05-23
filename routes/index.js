@@ -18,7 +18,7 @@ router.get('/api/lists/:listId', function(req, res, next) {
   return todoListCtrl.show(req, res);
 });
 
-router.post('/todo/:listId/items/new', function(req, res, next) {
+router.post('/api/lists/:listId/items/new', function(req, res, next) {
   return todoItemsCtrl.create(req, res);
 });
 
