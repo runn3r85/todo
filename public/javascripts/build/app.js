@@ -139,7 +139,7 @@ Router.run(routes, function (Handler) {
 //   document.getElementById('example')
 // );
 
-},{"../../libraries/bootstrap-sass-official/assets/javascripts/bootstrap":204,"../../libraries/jquery/dist/jquery":205,"./header.jsx":197,"./layout.jsx":198,"./listForm.jsx":200,"./lists.jsx":201,"./singleList.jsx":202,"react":196,"react-router":27}],2:[function(require,module,exports){
+},{"../../libraries/bootstrap-sass-official/assets/javascripts/bootstrap":205,"../../libraries/jquery/dist/jquery":206,"./header.jsx":197,"./layout.jsx":199,"./listForm.jsx":201,"./lists.jsx":202,"./singleList.jsx":203,"react":196,"react-router":27}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -22918,6 +22918,31 @@ module.exports = React.createClass({displayName: "exports",
 
 },{"react":196}],198:[function(require,module,exports){
 var React = require('react');
+
+
+module.exports = React.createClass({displayName: "exports",
+  handleSubmit: function(e) {
+    e.preventDefault();
+    var content = React.findDOMNode(this.refs.content).value.trim();
+    if (!content) {
+      return;
+    }
+    this.props.onItemSubmit({content: content});
+    React.findDOMNode(this.refs.content).value = '';
+    return;
+  },
+  render: function() {
+    return (
+      React.createElement("form", {className: "itemForm", onSubmit: this.handleSubmit}, 
+        React.createElement("input", {type: "text", ref: "content"}), 
+        React.createElement("input", {type: "submit", value: "Add", className: "btn btn-success"})
+      )
+    );
+  }
+});
+
+},{"react":196}],199:[function(require,module,exports){
+var React = require('react');
 var Router = require('react-router');
 
 var Link = Router.Link;
@@ -22948,7 +22973,7 @@ module.exports = React.createClass({displayName: "exports",
   }
 });
 
-},{"react":196,"react-router":27}],199:[function(require,module,exports){
+},{"react":196,"react-router":27}],200:[function(require,module,exports){
 var React = require('react');
 
 var Router = require('react-router');
@@ -22966,7 +22991,7 @@ module.exports = React.createClass({displayName: "exports",
   }
 });
 
-},{"react":196,"react-router":27}],200:[function(require,module,exports){
+},{"react":196,"react-router":27}],201:[function(require,module,exports){
 var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
@@ -22993,7 +23018,7 @@ module.exports = React.createClass({displayName: "exports",
   }
 });
 
-},{"react":196}],201:[function(require,module,exports){
+},{"react":196}],202:[function(require,module,exports){
 var React = require('react');
 var List = require('./list.jsx');
 
@@ -23018,13 +23043,34 @@ module.exports = React.createClass({displayName: "exports",
   }
 });
 
-},{"./list.jsx":199,"react":196}],202:[function(require,module,exports){
+},{"./list.jsx":200,"react":196}],203:[function(require,module,exports){
 var React = require('react');
 var TodoItem = require('./todoItem.jsx');
+var ItemForm = require('./itemForm.jsx');
 
 module.exports = React.createClass({displayName: "exports",
+  getInitialState: function() {
+    return {data: {items: []}};
+  },
+  handleItemSubmit: function(item) {
+    var list = this.props.data._id;
+    // var items = this.state.data.items;
+    // var newItems = items.concat([item]);
+    // this.setState({data: {items: [newItems]}});
+    $.ajax({
+      url: '/todo/' + list + '/items/new',
+      dataType: 'json',
+      type: 'POST',
+      data: item,
+      success: function(data) {
+        this.setState({data: { items: [data]}});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
   render: function() {
-    console.log(this.props.data.items);
     var itemNodes = this.props.data.items.map(function (item) {
       return (
         React.createElement(TodoItem, {content: item.content})
@@ -23034,6 +23080,7 @@ module.exports = React.createClass({displayName: "exports",
       React.createElement("div", null, 
         React.createElement("h1", {className: "text-center"}, this.props.data.title), 
         React.createElement("p", null, this.props.data.description), 
+        React.createElement(ItemForm, {onItemSubmit: this.handleItemSubmit}), 
         React.createElement("ul", {className: "list-group"}, 
           itemNodes
         )
@@ -23042,7 +23089,7 @@ module.exports = React.createClass({displayName: "exports",
   }
 });
 
-},{"./todoItem.jsx":203,"react":196}],203:[function(require,module,exports){
+},{"./itemForm.jsx":198,"./todoItem.jsx":204,"react":196}],204:[function(require,module,exports){
 var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
@@ -23055,7 +23102,7 @@ module.exports = React.createClass({displayName: "exports",
   }
 });
 
-},{"react":196}],204:[function(require,module,exports){
+},{"react":196}],205:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.4 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
@@ -25374,7 +25421,7 @@ if (typeof jQuery === 'undefined') {
 
 }(jQuery);
 
-},{}],205:[function(require,module,exports){
+},{}],206:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/
